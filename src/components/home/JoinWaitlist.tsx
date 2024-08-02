@@ -6,8 +6,8 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import copy from "copy-to-clipboard";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import Image from "next/image";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useAccount } from "wagmi";
 import Marquee from "../magicui/marquee";
@@ -30,7 +30,6 @@ const JoinWaitlist = () => {
   const [refByInput, setRefByInput] = useState("");
   const [newRefcode, setNewRefcode] = useState("");
   const [hostUrl, setHostUrl] = useState("");
-  const [step, setStep] = useState(1);
   const { openConnectModal } = useConnectModal();
   const { address } = useAccount();
   const searchParams = useSearchParams();
@@ -194,186 +193,190 @@ const JoinWaitlist = () => {
   };
 
   return (
-    <div id="join-waitlist" className="mt-16 lg:mt-24 p-4">
-      {/* <VelocityScroll
+    <Suspense fallback={<p>Loading...</p>}>
+      <div id="join-waitlist" className="mt-16 lg:mt-24 p-4">
+        {/* <VelocityScroll
         text=" Join Waitlist ✨"
         default_velocity={3}
         className="font-display text-center text-3xl tracking-[-0.02em] text-black drop-shadow-sm dark:text-light/90 md:text-7xl md:leading-[5rem]"
       /> */}
-      <div className="border overflow-hidden border-midnight/10 bg-light/90 dark:border-light/10 bg-midnight/90 rounded-3xl max-w-screen-2xl mx-auto flex items-center justify-between">
-        <div className="p-4 md:p-8 w-full max-w-2xl">
-          {!joinedUser ? (
-            <div className="">
-              <h2 className="text-2xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-light md:text-3xl mb-4">
-                You are early! Join us!!
-              </h2>
-              <p className="text-lg tracking-[-0.02em] text-gray-900 dark:text-light">
-                To be eligible for the Free mint of our limited edition Doomsday
-                Human collectable pfps, you must first join the waitlist. Follow
-                the steps to earn your keep.
-              </p>
-
-              <div className="mt-8">
-                <InputOTP
-                  onChange={(e) => setRefByInput(e)}
-                  value={refByInput || ""}
-                  maxLength={6}
-                  pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-                >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-              </div>
-
-              {refferedByUser ? (
-                <p className="mt-4">reffered by : {refferedByUser?.twitter}</p>
-              ) : (
-                <p className="mt-4">Enter valid Invite code</p>
-              )}
-
-              <div className="pt-8">
-                <p className="text-light/80 mb-4">
-                  Step {!address ? "1" : "2"} of 2
+        <div className="border overflow-hidden border-midnight/10 bg-light/90 dark:border-light/10 bg-midnight/90 rounded-3xl max-w-screen-2xl mx-auto flex items-center justify-between">
+          <div className="p-4 md:p-8 w-full max-w-2xl">
+            {!joinedUser ? (
+              <div className="">
+                <h2 className="text-2xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-light md:text-3xl mb-4">
+                  You are early! Join us!!
+                </h2>
+                <p className="text-lg tracking-[-0.02em] text-gray-900 dark:text-light">
+                  To be eligible for the Free mint of our limited edition
+                  Doomsday Human collectable pfps, you must first join the
+                  waitlist. Follow the steps to earn your keep.
                 </p>
-                {!address ? (
-                  <Button
-                    onClick={connectAccount}
-                    size={"lg"}
-                    className="gap-1 items-center font-inter "
+
+                <div className="mt-8">
+                  <InputOTP
+                    onChange={(e) => setRefByInput(e)}
+                    value={refByInput || ""}
+                    maxLength={6}
+                    pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
                   >
-                    Connect wallet{" "}
-                    <Icon name="SiWalletconnect" className="text-lg" />
-                  </Button>
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
+
+                {refferedByUser ? (
+                  <p className="mt-4">
+                    reffered by : {refferedByUser?.twitter}
+                  </p>
                 ) : (
-                  <div className="mb-4 flex items-center justify-start gap-4">
-                    <span>{truncateEthAddress(address)}</span>{" "}
-                    <Icon
-                      name="HiCheckBadge"
-                      className="text-cyan-500 text-xl"
-                    />
-                  </div>
+                  <p className="mt-4">Enter valid Invite code</p>
                 )}
 
-                {address && twitter ? (
-                  <div className="mb-4 flex items-center justify-start gap-4">
-                    <span>{twitter?.user?.user_metadata?.user_name}</span>{" "}
-                    <Icon
-                      name="HiCheckBadge"
-                      className="text-cyan-500 text-xl"
-                    />
-                  </div>
-                ) : address ? (
-                  <Button
-                    onClick={signInWithTwitter}
-                    size={"lg"}
-                    className="gap-1 items-center font-inter "
-                  >
-                    Verify account{" "}
-                    <Icon name="FaXTwitter" className="text-lg" />
-                  </Button>
-                ) : null}
-
-                {address && twitter ? (
-                  <Button
-                    onClick={joinWhitelist}
-                    size={"lg"}
-                    className="gap-1 items-center font-inter "
-                  >
-                    Join Whitelist{" "}
-                    {isLoading ? (
+                <div className="pt-8">
+                  <p className="text-light/80 mb-4">
+                    Step {!address ? "1" : "2"} of 2
+                  </p>
+                  {!address ? (
+                    <Button
+                      onClick={connectAccount}
+                      size={"lg"}
+                      className="gap-1 items-center font-inter "
+                    >
+                      Connect wallet{" "}
+                      <Icon name="SiWalletconnect" className="text-lg" />
+                    </Button>
+                  ) : (
+                    <div className="mb-4 flex items-center justify-start gap-4">
+                      <span>{truncateEthAddress(address)}</span>{" "}
                       <Icon
-                        name="HiSparkles"
-                        className="text-lg animate-pulse"
+                        name="HiCheckBadge"
+                        className="text-cyan-500 text-xl"
                       />
-                    ) : null}
-                  </Button>
-                ) : null}
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-light md:text-3xl mb-4">
-                🎉 Congratulations!! You made it.
-              </h2>
-              <p className="text-lg tracking-[-0.02em] text-gray-900 dark:text-light">
-                Sharing is caring, Invite your friends to join you in this mint.
-                and grab the oppurtinity to increase your mint limit
-              </p>
+                    </div>
+                  )}
 
-              <p className="text-primary">
-                Current mint limit : {joinedUser.point}
-              </p>
-              <div className="bg-dark p-4 rounded-xl border border-light/10 tracking-widest flex items-center justify-between gap-4 font-inter">
-                {`${hostUrl}?ref=${joinedUser?.refcode}`}{" "}
-                <Button
-                  onClick={() =>
-                    copyText(`https://${hostUrl}?ref=${joinedUser?.refcode}`)
-                  }
-                >
-                  Copy <Icon name="FaLink" className="text-xl" />
-                </Button>
+                  {address && twitter ? (
+                    <div className="mb-4 flex items-center justify-start gap-4">
+                      <span>{twitter?.user?.user_metadata?.user_name}</span>{" "}
+                      <Icon
+                        name="HiCheckBadge"
+                        className="text-cyan-500 text-xl"
+                      />
+                    </div>
+                  ) : address ? (
+                    <Button
+                      onClick={signInWithTwitter}
+                      size={"lg"}
+                      className="gap-1 items-center font-inter "
+                    >
+                      Verify account{" "}
+                      <Icon name="FaXTwitter" className="text-lg" />
+                    </Button>
+                  ) : null}
+
+                  {address && twitter ? (
+                    <Button
+                      onClick={joinWhitelist}
+                      size={"lg"}
+                      className="gap-1 items-center font-inter "
+                    >
+                      Join Whitelist{" "}
+                      {isLoading ? (
+                        <Icon
+                          name="HiSparkles"
+                          className="text-lg animate-pulse"
+                        />
+                      ) : null}
+                    </Button>
+                  ) : null}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-        <div className="hidden relative -right-10 lg:flex gap-0 h-[500px] flex-row items-center justify-center bg-background md:shadow-xl rotate-12">
-          <Marquee pauseOnHover vertical className="[--duration:50s]">
-            {getRandomList().map((human) => (
-              <Image
-                key={human}
-                className="w-[150px] h-[150px] object-cover transition-all duration-200 select-none"
-                src={human}
-                height="150"
-                width="150"
-                alt="Doomsday Human"
-              />
-            ))}
-          </Marquee>
-          <Marquee reverse pauseOnHover vertical className="[--duration:50s]">
-            {getRandomList().map((human) => (
-              <Image
-                key={human}
-                className="w-[150px] h-[150px] object-cover transition-all duration-200 select-none"
-                src={human}
-                height="150"
-                width="150"
-                alt="Doomsday Human"
-              />
-            ))}
-          </Marquee>
-          <Marquee pauseOnHover vertical className="[--duration:50s]">
-            {getRandomList().map((human) => (
-              <Image
-                key={human}
-                className="w-[150px] h-[150px] object-cover transition-all duration-200 select-none"
-                src={human}
-                height="150"
-                width="150"
-                alt="Doomsday Human"
-              />
-            ))}
-          </Marquee>
-          <Marquee reverse pauseOnHover vertical className="[--duration:50s]">
-            {getRandomList().map((human) => (
-              <Image
-                key={human}
-                className="w-[150px] h-[150px] object-cover transition-all duration-200 select-none"
-                src={human}
-                height="150"
-                width="150"
-                alt="Doomsday Human"
-              />
-            ))}
-          </Marquee>
+            ) : (
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-light md:text-3xl mb-4">
+                  🎉 Congratulations!! You made it.
+                </h2>
+                <p className="text-lg tracking-[-0.02em] text-gray-900 dark:text-light">
+                  Sharing is caring, Invite your friends to join you in this
+                  mint. and grab the oppurtinity to increase your mint limit
+                </p>
+
+                <p className="text-primary">
+                  Current mint limit : {joinedUser.point}
+                </p>
+                <div className="bg-dark p-4 rounded-xl border border-light/10 tracking-widest flex items-center justify-between gap-4 font-inter">
+                  {`${hostUrl}?ref=${joinedUser?.refcode}`}{" "}
+                  <Button
+                    onClick={() =>
+                      copyText(`https://${hostUrl}?ref=${joinedUser?.refcode}`)
+                    }
+                  >
+                    Copy <Icon name="FaLink" className="text-xl" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="hidden relative -right-10 lg:flex gap-0 h-[500px] flex-row items-center justify-center bg-background md:shadow-xl rotate-12">
+            <Marquee pauseOnHover vertical className="[--duration:50s]">
+              {getRandomList().map((human) => (
+                <Image
+                  key={human}
+                  className="w-[150px] h-[150px] object-cover transition-all duration-200 select-none"
+                  src={human}
+                  height="150"
+                  width="150"
+                  alt="Doomsday Human"
+                />
+              ))}
+            </Marquee>
+            <Marquee reverse pauseOnHover vertical className="[--duration:50s]">
+              {getRandomList().map((human) => (
+                <Image
+                  key={human}
+                  className="w-[150px] h-[150px] object-cover transition-all duration-200 select-none"
+                  src={human}
+                  height="150"
+                  width="150"
+                  alt="Doomsday Human"
+                />
+              ))}
+            </Marquee>
+            <Marquee pauseOnHover vertical className="[--duration:50s]">
+              {getRandomList().map((human) => (
+                <Image
+                  key={human}
+                  className="w-[150px] h-[150px] object-cover transition-all duration-200 select-none"
+                  src={human}
+                  height="150"
+                  width="150"
+                  alt="Doomsday Human"
+                />
+              ))}
+            </Marquee>
+            <Marquee reverse pauseOnHover vertical className="[--duration:50s]">
+              {getRandomList().map((human) => (
+                <Image
+                  key={human}
+                  className="w-[150px] h-[150px] object-cover transition-all duration-200 select-none"
+                  src={human}
+                  height="150"
+                  width="150"
+                  alt="Doomsday Human"
+                />
+              ))}
+            </Marquee>
+          </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 
