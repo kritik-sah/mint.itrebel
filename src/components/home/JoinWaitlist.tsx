@@ -32,9 +32,9 @@ const JoinWaitlist = () => {
   const [hostUrl, setHostUrl] = useState("");
   const { openConnectModal } = useConnectModal();
   const { address } = useAccount();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  let refBy = searchParams.get("ref");
+  // let refBy = searchParams.get("ref");
   const router = useRouter();
 
   const getRefbyuser = async (code?: string) => {
@@ -51,14 +51,11 @@ const JoinWaitlist = () => {
   };
 
   useEffect(() => {
-    if (refBy) {
-      setRefByInput(refBy);
-      router.push("/");
-    } else if (refByInput.length === 6) {
+    if (refByInput.length === 6) {
       sessionStorage.setItem("refBy", refByInput);
       getRefbyuser(refByInput);
     }
-  }, [refBy, refByInput]);
+  }, [refByInput]);
 
   useEffect(() => {
     const refcode = sessionStorage.getItem("refBy");
@@ -92,7 +89,13 @@ const JoinWaitlist = () => {
 
   useEffect(() => {
     fetchSession();
-
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const refBy = urlParams.get("ref");
+    if (refBy) {
+      setRefByInput(refBy);
+      router.push("/");
+    }
     setHostUrl(window.location.host);
   }, []);
 
@@ -194,7 +197,7 @@ const JoinWaitlist = () => {
 
   return (
     <Suspense fallback={<p>Loading...</p>}>
-      <div id="join-waitlist" className="mt-16 lg:mt-24 p-4">
+      <div id="join-waitlist" className="px-4">
         {/* <VelocityScroll
         text=" Join Waitlist ✨"
         default_velocity={3}

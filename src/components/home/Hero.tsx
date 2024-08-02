@@ -6,7 +6,7 @@ import Timer from "./Timer";
 const Hero = () => {
   return (
     <section className="px-4">
-      <div className="relative mt-16 lg:mt-24 h-[80vh] w-full hover:scale-[101%] transition-all ease-in-out duration-300 max-w-screen-2xl mx-auto  rounded-3xl overflow-hidden bg-[url('/images/Doomsday.png')]  bg-center bg-no-repeat bg-cover">
+      <div className="relative mt-16 lg:mt-24 h-[80vh] w-full hover:scale-[101%] transition-all ease-in-out duration-300 max-w-screen-2xl mx-auto  rounded-3xl overflow-hidden bg-[url('/images/Doomsday-potrait.png')] md:bg-[url('/images/Doomsday.png')]  bg-center bg-no-repeat bg-cover">
         <div className="h-full w-full p-4 md:p-8 bg-gradient-to-t from-dark/90 to-dark/40 md:to-dark/0 flex items-end ">
           <div className="absolute top-4 right-4 lg:top-8 lg:right-8 flex items-center justify-end gap-4">
             <Button size={"icon"} className="rounded-full">
