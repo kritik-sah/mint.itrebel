@@ -186,6 +186,12 @@ const JoinWaitlist = () => {
       return;
     }
 
+    /// update ref user point +1
+    const { error: updateError } = await supabase
+      .from("whitelist")
+      .update({ point: refferedByUser.point++ })
+      .eq("twitter", refferedByUser.twitter);
+
     checkUserJoinedWhitelist();
     setIsLoading(false);
   };

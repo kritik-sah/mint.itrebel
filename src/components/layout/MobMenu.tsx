@@ -32,9 +32,28 @@ const MobMenu = () => {
         } w-full rounded-lg p-4 transition-all ease-in-out duration-150`}
       >
         <div className="flex flex-col gap-4">
-          <a href="#features" className="hover:text-primary">
-            Features
+          <a
+            onClick={() => setOpen(false)}
+            className="hover:text-primary"
+            href="#join-waitlist"
+          >
+            Join waitlist
           </a>
+          <a
+            onClick={() => setOpen(false)}
+            className="hover:text-primary"
+            href="#merch"
+          >
+            Merch
+          </a>
+          <a
+            onClick={() => setOpen(false)}
+            className="hover:text-primary"
+            href="https://opensea.io/collection/doomsdayhuman/overview"
+          >
+            OpenSea
+          </a>
+
           {address ? (
             <ConnectButton />
           ) : (

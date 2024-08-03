@@ -78,7 +78,7 @@ const products = [
 
 const Product = () => {
   return (
-    <div className="relative px-4 my-16 lg:my-24 overflow-hidden">
+    <div id="merch" className="relative px-4 my-16 lg:my-24 overflow-hidden">
       <div className="flex my-6 w-full flex-col items-center justify-center gap-4">
         <h2 className="text-3xl font-bold text-center text-white">
           Collection Merch

@@ -45,14 +45,12 @@ const Timer = () => {
         )}
       </div>
       <div className="hidden lg:block">
-        <FlipClockCountdown
-          to={new Date("2024 09 01").getTime() + 24 * 3600 * 1000 + 5000}
-        />
+        <FlipClockCountdown to={new Date("2024-08-31T18:30:00").getTime()} />
       </div>
       <div className="block lg:hidden">
         <FlipClockCountdown
           digitBlockStyle={{ width: 20, height: 30, fontSize: 18 }}
-          to={new Date("2024 09 01").getTime() + 24 * 3600 * 1000 + 5000}
+          to={new Date("2024-08-31T18:30:00").getTime()}
         />
       </div>
     </div>

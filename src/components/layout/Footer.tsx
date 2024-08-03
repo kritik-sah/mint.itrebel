@@ -59,6 +59,19 @@ const Footer = () => {
                 Join waitlist
               </a>
             </li>
+            <li>
+              <a className="transition hover:text-light/75" href="#merch">
+                Merch
+              </a>
+            </li>
+            <li>
+              <a
+                className="transition hover:text-light/75"
+                href="https://opensea.io/collection/doomsdayhuman/overview"
+              >
+                OpenSea
+              </a>
+            </li>
           </ul>
         </div>
 

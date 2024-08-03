@@ -38,6 +38,24 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="hidden lg:flex lg:justify-start lg:ml-16 lg:space-x-8 xl:space-x-14">
+            <a
+              className="hover:text-primary transition-all duration-200"
+              href="#join-waitlist"
+            >
+              Join waitlist
+            </a>
+            <a
+              className="hover:text-primary transition-all duration-200"
+              href="#merch"
+            >
+              Merch
+            </a>
+            <a
+              className="hover:text-primary transition-all duration-200"
+              href="https://opensea.io/collection/doomsdayhuman/overview"
+            >
+              OpenSea
+            </a>
             {/* <a
               href="#"
               className="text-base font-medium text-gray-900 dark:text-light transition-all duration-200 rounded focus:outline-none hover:text-gray-700 dark:hover:text-light/70 focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
