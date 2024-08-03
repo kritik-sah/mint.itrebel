@@ -2,6 +2,7 @@ import SiteLayout from "@/components/layout/Site";
 import Provider from "@/context/provider";
 import type { Metadata } from "next";
 import { Inter, Sedgwick_Ave, Sedgwick_Ave_Display } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -35,6 +36,20 @@ export default function RootLayout({
       lang="en"
       className={`${sedgwickDislay.variable} ${sedgwick.variable} ${inter.variable}`}
     >
+      <head>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-G5E6SBFBV8"
+        ></Script>
+        <Script id="google-analytics">
+          {` window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-G5E6SBFBV8');
+    `}
+        </Script>
+      </head>
       <body className="font-normal bg-dark">
         <Provider>
           <SiteLayout>{children}</SiteLayout>
