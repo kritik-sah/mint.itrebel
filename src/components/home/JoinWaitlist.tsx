@@ -39,15 +39,15 @@ const JoinWaitlist = () => {
 
   const getRefbyuser = async (code?: string) => {
     const refcode = code || sessionStorage.getItem("refBy");
-    console.log("refcode :", refcode);
+
     const { data, error } = await supabase
       .from("whitelist")
       .select()
       .eq("refcode", refcode);
     if (data?.length) {
       setRefferedByUser(data[0]);
+      return data[0];
     }
-    console.log("refcode", refcode, ", Data :", data);
   };
 
   useEffect(() => {
@@ -84,7 +84,6 @@ const JoinWaitlist = () => {
     if (data?.session?.user.app_metadata.provider === "twitter") {
       sessionStorage.setItem("twitter", JSON.stringify(data.session));
     }
-    console.log("session :", data);
   };
 
   useEffect(() => {
@@ -109,6 +108,7 @@ const JoinWaitlist = () => {
       provider: "twitter",
     });
     if (error) {
+      toast.error("Failed to sign in with Twitter");
       console.error(error);
       return;
     }
@@ -132,7 +132,6 @@ const JoinWaitlist = () => {
     }
 
     setNewRefcode(refCode);
-    console.log(refCode);
     return refCode;
   };
 
@@ -153,6 +152,20 @@ const JoinWaitlist = () => {
   useEffect(() => {
     generateRefCode();
   }, []);
+
+  const updateRefferpoint = async () => {
+    if (refferedByUser) {
+      const refUser = await getRefbyuser();
+      /// update ref user point +1
+      const { error: updateError } = await supabase
+        .from("whitelist")
+        .update({ point: refUser.point + 1 })
+        .eq("twitter", refUser.twitter);
+      if (updateError) {
+        console.log("Error updating ref user point: " + updateError);
+      }
+    }
+  };
 
   const joinWhitelist = async () => {
     setIsLoading(true);
@@ -180,17 +193,13 @@ const JoinWaitlist = () => {
         fetchSession();
         router.refresh();
       } else {
+        toast.error("Failed to join waitlist");
         console.log("Error joining waitlist: " + error);
       }
       setIsLoading(false);
       return;
     }
-
-    /// update ref user point +1
-    const { error: updateError } = await supabase
-      .from("whitelist")
-      .update({ point: refferedByUser.point++ })
-      .eq("twitter", refferedByUser.twitter);
+    updateRefferpoint();
 
     checkUserJoinedWhitelist();
     setIsLoading(false);
@@ -209,6 +218,7 @@ const JoinWaitlist = () => {
         default_velocity={3}
         className="font-display text-center text-3xl tracking-[-0.02em] text-black drop-shadow-sm dark:text-light/90 md:text-7xl md:leading-[5rem]"
       /> */}
+        <Button onClick={updateRefferpoint}>+1</Button>
         <div className="border overflow-hidden border-midnight/10 bg-light/90 dark:border-light/10 bg-midnight/90 rounded-3xl max-w-screen-2xl mx-auto flex items-center justify-between">
           <div className="p-4 md:p-8 w-full max-w-2xl">
             {!joinedUser ? (
