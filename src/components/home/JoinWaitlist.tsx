@@ -218,7 +218,6 @@ const JoinWaitlist = () => {
         default_velocity={3}
         className="font-display text-center text-3xl tracking-[-0.02em] text-black drop-shadow-sm dark:text-light/90 md:text-7xl md:leading-[5rem]"
       /> */}
-        <Button onClick={updateRefferpoint}>+1</Button>
         <div className="border overflow-hidden border-midnight/10 bg-light/90 dark:border-light/10 bg-midnight/90 rounded-3xl max-w-screen-2xl mx-auto flex items-center justify-between">
           <div className="p-4 md:p-8 w-full max-w-2xl">
             {!joinedUser ? (
