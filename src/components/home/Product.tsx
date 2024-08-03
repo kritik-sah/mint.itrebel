@@ -84,8 +84,9 @@ const Product = () => {
           Collection Merch
         </h2>
         <p>
-          Over 64 kind of official merchandise are avilable. Checkout our
-          printing and distribution Partners.
+          Over{" "}
+          <span className="text-primary">64+ kind of official merchandise</span>{" "}
+          are avilable. Checkout our printing and distribution Partners.
         </p>
       </div>
       <div className="flex w-full max-w-screen-2xl mx-auto flex-col justify-center">
